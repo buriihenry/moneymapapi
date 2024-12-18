@@ -2,7 +2,7 @@ from django.db import models
 from authentication .models import User
 
 # Create your models here.
-class Expenses(models.Model):
+class Expense(models.Model):
     CATEGORY_OPTIONS =[
         ('ONLINE_SERVICES','ONLINE_SERVICES'),
         ('TRAVEL','TRAVEL'),
