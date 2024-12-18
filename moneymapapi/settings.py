@@ -98,10 +98,10 @@ DATABASES = {
 }
 
 REST_FRAMEWORK ={
-    'NON_FIELD_ERRORS_KEY': 'error',\
-    
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 8,
+    'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
