@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from rest_framework import generics, status, views
-from .serializers import RegisterSerializer, SetNewPasswordSerializer,EmailVerificationSerializer, LoginSerializer, ResetPasswordEmailRequestSerializer
+from rest_framework import generics, status, views, permissions
+from .serializers import RegisterSerializer, SetNewPasswordSerializer,EmailVerificationSerializer, LoginSerializer, ResetPasswordEmailRequestSerializer, LogoutSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
@@ -113,6 +113,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         return Response({'success':'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
 
 class PasswordCheckAPI(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+    
     def get(self, request, uidb64,token):
         
         try:
@@ -136,6 +138,18 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
     def patch(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return Response({'success':True,'message':'Password reset success'}, status=status.HTTP_200_OK)        
+        return Response({'success':True,'message':'Password reset success'}, status=status.HTTP_200_OK)   
+
+class LogoutAPIView(generics.GenericAPIView):
+    serializer_class = LogoutSerializer
+
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)         
 
 
